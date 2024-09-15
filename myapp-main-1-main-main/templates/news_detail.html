@@ -1,0 +1,10 @@
+{% extends '_base.html' %}
+
+{% block title %}News: {{ news.title }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-8">
+    <h1 class="text-4xl font-bold">{{ news.title }}</h1>
+    <p class="text-lg mt-4">{{ news.summary }}</p>
+</div>
+{% endblock %}

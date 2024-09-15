@@ -1,0 +1,141 @@
+{% extends '_base.html' %}
+{% load static %}
+{% block title %}Movie Review{% endblock %}
+
+{% block extra_head %}
+<!-- Additional head content here -->
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-8">
+    <!-- Movie Section -->
+    <div class="text-center mb-12">
+        <div class="relative mx-auto" style="max-width: 800px;">
+            <!-- Image Container with Animation -->
+            <img id="movieImage" src="{% static 'images/titanic.png' %}" alt="Movie" class="w-full h-auto">
+            <!-- Image Navigation Buttons -->
+            <div class="absolute inset-0 flex justify-between items-center">
+                <button id="prevButton" class="bg-black bg-opacity-50 text-white p-4 hover:bg-opacity-75">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <button id="nextButton" class="bg-black bg-opacity-50 text-white p-4 hover:bg-opacity-75">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <p class="mt-4 text-lg leading-relaxed max-w-2xl mx-auto">
+            การ์ตูนหนังสามารถส่งเสริมสุขภาพจิตและอารมณ์ได้อย่างดี...
+        </p>
+    </div>
+
+    <!-- Top pick Section -->
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold text-red-600 mb-4">Top pick <span class="text-white">TV shows and movies just for you</span></h2>
+        <div class="grid grid-cols-3 gap-2"> <!-- Reduced gap from 4 to 2 -->
+            {% for i in "123456" %}
+            <div class="relative group">
+                <a href="{% url 'toppick' i %}" class="block">
+                    <!-- Adjusted the width and added h-auto for responsiveness -->
+                    <img src="{% static 'images/POSTER'|add:i|add:'.png' %}" alt="Movie {{ i }}" class="w-2/3 h-auto mx-auto transition-transform duration-300 ease-in-out group-hover:scale-105 group-hover:shadow-xl group-hover:ring-4 group-hover:ring-red-500">
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+    
+
+
+{% endblock content %}
+
+{% block script %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const movieImage = document.getElementById('movieImage');
+    let movieIndex = 0;
+
+    const imagePaths = [
+        "{% static 'images/POSTER1.png' %}",
+        "{% static 'images/POSTER2.png' %}",
+        "{% static 'images/POSTER3.png' %}",
+        "{% static 'images/POSTER4.png' %}",
+        "{% static 'images/POSTER5.png' %}",
+        "{% static 'images/POSTER6.png' %}"
+    ];
+
+    function fadeOut(element, duration) {
+        let opacity = 1;
+        const interval = 50; // Update every 50ms
+        const gap = interval / duration;
+        function fade() {
+            opacity -= gap;
+            if (opacity <= 0) {
+                opacity = 0;
+                clearInterval(fading);
+                element.style.opacity = opacity;
+                // Proceed to fade in the new image
+                setTimeout(() => {
+                    element.src = imagePaths[movieIndex];
+                    fadeIn(element, duration);
+                }, 100); // Short delay before fade in
+            } else {
+                element.style.opacity = opacity;
+            }
+        }
+        const fading = setInterval(fade, interval);
+    }
+
+    function fadeIn(element, duration) {
+        let opacity = 0;
+        const interval = 50; // Update every 50ms
+        const gap = interval / duration;
+        function fade() {
+            opacity += gap;
+            if (opacity >= 1) {
+                opacity = 1;
+                clearInterval(fading);
+                element.style.opacity = opacity;
+            } else {
+                element.style.opacity = opacity;
+            }
+        }
+        const fading = setInterval(fade, interval);
+    }
+
+    function updateImage() {
+        console.log('Updating image to:', imagePaths[movieIndex]);
+        fadeOut(movieImage, 1000); // Fade out duration in ms
+    }
+
+    function nextImage() {
+        movieIndex = (movieIndex + 1) % imagePaths.length;
+        updateImage();
+    }
+
+    function prevImage() {
+        movieIndex = (movieIndex - 1 + imagePaths.length) % imagePaths.length;
+        updateImage();
+    }
+
+    const autoSlide = setInterval(nextImage, 3000);
+
+    document.getElementById('nextButton').addEventListener('click', function () {
+        console.log('Next button clicked');
+        nextImage();
+    });
+
+    document.getElementById('prevButton').addEventListener('click', function () {
+        console.log('Previous button clicked');
+        prevImage();
+    });
+
+    console.log("JavaScript loaded and ready to work");
+});
+</script>
+{% endblock script %}

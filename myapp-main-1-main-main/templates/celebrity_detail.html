@@ -1,0 +1,13 @@
+{% extends '_base.html' %}
+
+{% block title %}{{ celebrity.name }} Details{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-8">
+    <div class="celebrity-detail">
+        <img src="{{ celebrity.image }}" alt="{{ celebrity.name }}" class="w-full h-96 object-cover mb-4">
+        <h1 class="text-4xl font-bold">{{ celebrity.name }}</h1>
+        <p class="text-lg mt-4">{{ celebrity.bio }}</p>
+    </div>
+</div>
+{% endblock %}
